@@ -1,4 +1,23 @@
-# Smart Expense Analyzer - Version 1 (Category Totals Added)
+# Smart Expense Analyzer - Version 2 (CSV Input)
+
+import csv
+
+
+def load_expenses_from_csv(file_path):
+    expenses = []
+
+    with open(file_path, newline="") as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        for row in reader:
+            expenses.append({
+                "date": row["date"],
+                "category": row["category"],
+                "amount": float(row["amount"])
+            })
+
+    return expenses
+
 
 def calculate_total_spent(expenses):
     total = 0
@@ -22,13 +41,7 @@ def calculate_category_totals(expenses):
     return category_totals
 
 
-expenses = [
-    {"date": "2025-01-01", "category": "Rent", "amount": 1200},
-    {"date": "2025-01-03", "category": "Food", "amount": 45},
-    {"date": "2025-01-05", "category": "Food", "amount": 30},
-    {"date": "2025-01-08", "category": "Transport", "amount": 60},
-    {"date": "2025-01-10", "category": "Entertainment", "amount": 100},
-]
+expenses = load_expenses_from_csv("data/expenses.csv")
 
 total_spent = calculate_total_spent(expenses)
 category_totals = calculate_category_totals(expenses)
