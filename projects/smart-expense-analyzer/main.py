@@ -1,4 +1,11 @@
-# Smart Expense Analyzer - Version 1
+# Smart Expense Analyzer - Version 1 (Refactored)
+
+def calculate_total_spent(expenses):
+    total = 0
+    for expense in expenses:
+        total += expense["amount"]
+    return total
+
 
 expenses = [
     {"date": "2025-01-01", "category": "Rent", "amount": 1200},
@@ -8,9 +15,6 @@ expenses = [
     {"date": "2025-01-10", "category": "Entertainment", "amount": 100},
 ]
 
-total_spent = 0
-
-for expense in expenses:
-    total_spent += expense["amount"]
+total_spent = calculate_total_spent(expenses)
 
 print("Total spent:", total_spent)
