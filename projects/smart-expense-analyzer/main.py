@@ -14,14 +14,20 @@ DEFAULT_BUDGETS = {
     "Entertainment": 200,
 }
 
+# Month-specific overrides (full-month budgets)
 MONTHLY_BUDGET_OVERRIDES = {
-    # Example: rent begins in Feb
-    "2025-02": {
-        "Rent": 1500,
-    },
-    # You can add more months later:
-    # "2025-03": {"Rent": 1500},
+    "2026-03": {"Rent": 1400},
+    "2026-04": {"Rent": 1400},
+    # Add more months as needed
 }
+
+# Special case: rent starts mid-month (prorated)
+RENT_START = {
+    "month": "2026-02",
+    "start_day": 14,
+    "full_month_amount": 1400,
+}
+
 
 
 # ----------------------------
@@ -275,10 +281,30 @@ def evaluate_budgets(monthly_category_totals, current_month, budgets):
 def get_budgets_for_month(month_key):
     budgets = DEFAULT_BUDGETS.copy()
 
-    overrides = MONTHLY_BUDGET_OVERRIDES.get(month_key, {})
-    budgets.update(overrides)
+    # Apply standard month overrides
+    budgets.update(MONTHLY_BUDGET_OVERRIDES.get(month_key, {}))
+
+    # Apply prorated rent for the rent-start month
+    if month_key == RENT_START["month"]:
+        budgets["Rent"] = prorated_rent_budget(
+            month_key,
+            RENT_START["start_day"],
+            RENT_START["full_month_amount"],
+        )
 
     return budgets
+
+
+def prorated_rent_budget(month_key, start_day, full_month_amount):
+    year, month = map(int, month_key.split("-"))
+    days_in_month = calendar.monthrange(year, month)[1]
+
+    # Rent applies from start_day through end of month (inclusive)
+    days_covered = days_in_month - start_day + 1
+    daily_rate = full_month_amount / days_in_month
+
+    return daily_rate * days_covered
+
 
 
 
@@ -358,6 +384,7 @@ def main():
     else:
         for alert in budget_alerts:
             print(f"- {alert}")
+
 
 
 if __name__ == "__main__":
