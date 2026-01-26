@@ -8,12 +8,21 @@ from datetime import datetime
 # ----------------------------
 # Budget Configuration
 # ----------------------------
-BUDGETS = {
-    "Rent": 1500,
+DEFAULT_BUDGETS = {
     "Food": 400,
     "Transport": 250,
     "Entertainment": 200,
 }
+
+MONTHLY_BUDGET_OVERRIDES = {
+    # Example: rent begins in Feb
+    "2025-02": {
+        "Rent": 1500,
+    },
+    # You can add more months later:
+    # "2025-03": {"Rent": 1500},
+}
+
 
 # ----------------------------
 # Data Loading
@@ -263,6 +272,15 @@ def evaluate_budgets(monthly_category_totals, current_month, budgets):
 
     return alerts
 
+def get_budgets_for_month(month_key):
+    budgets = DEFAULT_BUDGETS.copy()
+
+    overrides = MONTHLY_BUDGET_OVERRIDES.get(month_key, {})
+    budgets.update(overrides)
+
+    return budgets
+
+
 
 # ----------------------------
 # Main Program
@@ -332,7 +350,9 @@ def main():
             print(f"- {line}")
 
     print("\nBudget Alerts:")
-    budget_alerts = evaluate_budgets(monthly_category_totals, current_month, BUDGETS)
+    budgets_for_current_month = get_budgets_for_month(current_month)
+    budget_alerts = evaluate_budgets(monthly_category_totals, current_month, budgets_for_current_month)
+
     if not budget_alerts:
         print("All categories are within budget.")
     else:
