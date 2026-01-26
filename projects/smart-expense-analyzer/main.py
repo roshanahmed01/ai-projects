@@ -1,10 +1,19 @@
 # Smart Expense Analyzer
-# Reads expenses from CSV and outputs summaries, trends, predictions, and insights.
+# Reads expenses from CSV and outputs summaries, trends, predictions, insights, and budget alerts.
 
 import csv
 import calendar
 from datetime import datetime
 
+# ----------------------------
+# Budget Configuration
+# ----------------------------
+BUDGETS = {
+    "Rent": 1500,
+    "Food": 400,
+    "Transport": 250,
+    "Entertainment": 200,
+}
 
 # ----------------------------
 # Data Loading
@@ -122,10 +131,6 @@ def calculate_month_over_month_change(monthly_totals):
 # Prediction + Evaluation
 # ----------------------------
 def predict_monthly_spending(expenses, target_month):
-    """
-    Predict end-of-month spending for target_month using:
-    (total spent so far) / (latest day seen in data) * (days in month)
-    """
     total_spent_so_far = 0
     days_with_data = set()
 
@@ -157,10 +162,6 @@ def evaluate_prediction(predicted, actual):
 
 
 def predict_mid_month(expenses, target_month, cutoff_day):
-    """
-    Simulate making a prediction on a cutoff day inside a month.
-    Uses: (spent up to cutoff_day) / cutoff_day * (days in month)
-    """
     spent_until_cutoff = 0
 
     for expense in expenses:
@@ -183,7 +184,7 @@ def predict_mid_month(expenses, target_month, cutoff_day):
 
 
 # ----------------------------
-# Insights
+# Insights + Budgets
 # ----------------------------
 def generate_insights(monthly_totals, monthly_category_totals, current_month, predicted_total=None):
     insights = []
@@ -241,6 +242,28 @@ def generate_insights(monthly_totals, monthly_category_totals, current_month, pr
     return insights
 
 
+def evaluate_budgets(monthly_category_totals, current_month, budgets):
+    alerts = []
+    month_data = monthly_category_totals.get(current_month, {})
+
+    for category, budget in budgets.items():
+        spent = month_data.get(category, 0)
+        pct_used = (spent / budget) * 100 if budget > 0 else 0
+
+        if pct_used >= 100:
+            alerts.append(
+                f"ALERT: {category} is OVER budget "
+                f"({spent:.2f} / {budget:.2f}, {pct_used:.1f}%)."
+            )
+        elif pct_used >= 80:
+            alerts.append(
+                f"Warning: {category} is at {pct_used:.1f}% of budget "
+                f"({spent:.2f} / {budget:.2f})."
+            )
+
+    return alerts
+
+
 # ----------------------------
 # Main Program
 # ----------------------------
@@ -252,14 +275,11 @@ def main():
     monthly_totals = calculate_monthly_totals(expenses)
     monthly_category_totals = calculate_monthly_category_totals(expenses)
 
-    # Determine "current" month (latest month in data)
     current_month = max(monthly_totals.keys())
 
-    # Prediction for current month
     prediction = predict_monthly_spending(expenses, current_month)
     predicted_total = prediction[1] if prediction is not None else None
 
-    # --- Output: totals ---
     print(f"Total spent: {total_spent:.2f}")
 
     print("\nSpending by category:")
@@ -270,7 +290,6 @@ def main():
     for month, amount in monthly_totals.items():
         print(f"{month}: {amount:.2f}")
 
-    # --- Output: MoM change ---
     mom_changes = calculate_month_over_month_change(monthly_totals)
 
     print("\nMonth-over-month change:")
@@ -283,7 +302,6 @@ def main():
                 f"{change['change']:+.2f} ({change['percent_change']:+.2f}%)"
             )
 
-    # --- Output: end-of-month prediction ---
     print("\nEnd-of-month prediction:")
     if prediction is None:
         print("Not enough data to predict spending.")
@@ -292,7 +310,6 @@ def main():
         print(f"Spent so far in {current_month}: {spent_so_far:.2f}")
         print(f"Predicted end-of-month spending: {predicted_eom:.2f}")
 
-    # --- Output: prediction accuracy simulation ---
     print("\nPrediction accuracy (historical simulation):")
     for month, actual in monthly_totals.items():
         simulated_prediction = predict_mid_month(expenses, month, cutoff_day=15)
@@ -306,17 +323,21 @@ def main():
             f"error {error:+.2f} ({percent_error:+.2f}%)"
         )
 
-    # --- Output: insights ---
     print("\nInsights:")
-    insights = generate_insights(
-        monthly_totals, monthly_category_totals, current_month, predicted_total=predicted_total
-    )
-
+    insights = generate_insights(monthly_totals, monthly_category_totals, current_month, predicted_total=predicted_total)
     if not insights:
         print("No insights available yet (need at least 2 months of data).")
     else:
         for line in insights:
             print(f"- {line}")
+
+    print("\nBudget Alerts:")
+    budget_alerts = evaluate_budgets(monthly_category_totals, current_month, BUDGETS)
+    if not budget_alerts:
+        print("All categories are within budget.")
+    else:
+        for alert in budget_alerts:
+            print(f"- {alert}")
 
 
 if __name__ == "__main__":
