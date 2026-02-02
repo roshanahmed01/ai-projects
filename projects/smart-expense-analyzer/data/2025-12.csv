@@ -1,0 +1,81 @@
+date,description,amount,type,category
+2025-11-28,Deloitte Payroll,1793.82,income,Payroll
+2025-12-12,Deloitte Payroll,1734.55,income,Payroll
+2025-12-23,Deloitte Payroll,2669.04,income,Payroll
+
+2025-11-29,Alfies,-10.65,expense,Food
+2025-11-29,Ihop,-20.85,expense,Food
+2025-11-29,Mcdonald's,-7.58,expense,Food
+2025-11-29,Wal-Mart,-121.30,expense,Food
+2025-11-30,Mcdonald's,-9.60,expense,Food
+
+2025-12-01,Spotify,-13.57,expense,Entertainment
+2025-12-02,T-Mobile,-80.00,expense,Transport
+2025-12-03,Walmart.com,-60.65,expense,Food
+2025-12-03,Great Clips,-26.00,expense,Health
+2025-12-03,Walmart,-1.68,expense,Food
+2025-12-03,Tijuana Flats,-14.43,expense,Food
+
+2025-12-04,7-Eleven,-11.42,expense,Food
+2025-12-04,Busch Gardens Merch,-5.77,expense,Entertainment
+2025-12-04,Busch Gardens Food,-8.21,expense,Food
+2025-12-04,Uber,-6.79,expense,Transport
+2025-12-05,Busch Gardens Food,-18.65,expense,Food
+2025-12-05,Busch Gardens Food,-14.50,expense,Food
+2025-12-05,Busch Gardens Food,-6.98,expense,Food
+2025-12-05,Busch Gardens Food,-8.94,expense,Food
+2025-12-05,Cicis Pizza,-13.20,expense,Food
+
+2025-12-06,Best Lockers,-4.00,expense,Entertainment
+2025-12-06,SunPass,-10.00,expense,Transport
+2025-12-06,The Brass Tap,-46.94,expense,Entertainment
+2025-12-06,Publix,-32.13,expense,Food
+2025-12-06,Crafty Squirrel,-14.24,expense,Entertainment
+2025-12-06,Good Night John,-10.00,expense,Entertainment
+2025-12-06,Good Night John,-21.50,expense,Entertainment
+2025-12-06,217 Boston,-11.02,expense,Food
+2025-12-06,217 Boston,-11.02,expense,Food
+2025-12-06,Welcome To St Pete,-10.00,expense,Entertainment
+2025-12-06,260 Sp Fla LLC,-5.62,expense,Food
+2025-12-06,Shiso Crispy,-14.98,expense,Food
+2025-12-06,Uber,-17.87,expense,Transport
+
+2025-12-07,The Brass Tap,-30.03,expense,Entertainment
+2025-12-07,Circle K,-28.83,expense,Transport
+2025-12-07,Publix,-6.38,expense,Food
+2025-12-07,Alfies,-31.59,expense,Food
+2025-12-07,Alfies,-15.80,expense,Food
+2025-12-07,Eggdose,-18.64,expense,Food
+
+2025-12-08,Walmart,-35.94,expense,Food
+
+2025-12-10,32 Market,-3.75,expense,Food
+
+2025-12-12,Taco Bell,-10.90,expense,Food
+2025-12-12,Taco Bell,-14.00,expense,Food
+
+2025-12-14,The Robinson Bar,-8.46,expense,Entertainment
+2025-12-14,The Robinson Bar,-7.46,expense,Entertainment
+2025-12-14,Nmxh Service LLC,-14.70,expense,Entertainment
+
+2025-12-15,Apple.com,-1.99,expense,Entertainment
+2025-12-15,Jason's Deli,-14.01,expense,Food
+2025-12-15,Chipotle,-13.16,expense,Food
+2025-12-16,EOS Fitness,-13.68,expense,Health
+2025-12-17,Walmart,-11.64,expense,Food
+
+2025-12-17,Regal Cinemas,-31.40,expense,Entertainment
+2025-12-17,Mcdonald's,-18.00,expense,Food
+2025-12-17,Chipotle,-12.84,expense,Food
+2025-12-18,Regal Cinemas,-31.40,expense,Entertainment
+
+2025-12-19,SunPass,-10.00,expense,Transport
+2025-12-19,Miller's Ale House,-32.21,expense,Food
+2025-12-19,Regal Waterford,-22.87,expense,Entertainment
+
+2025-12-22,Wawa,-24.49,expense,Food
+2025-12-22,The Guesthouse,-31.95,expense,Food
+2025-12-22,Alfies,-10.65,expense,Food
+2025-12-22,Tin And Taco,-15.44,expense,Food
+
+2025-12-23,Omg Thrift,-17.10,expense,Entertainment

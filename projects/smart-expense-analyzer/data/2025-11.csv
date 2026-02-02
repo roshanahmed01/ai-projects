@@ -1,0 +1,64 @@
+date,description,amount,type,category
+2025-10-31,Deloitte Payroll,1701.88,income,Payroll
+2025-11-14,Deloitte Payroll,3772.65,income,Payroll
+
+2025-10-27,Safeway Parking,-42.00,expense,Transport
+2025-10-27,Orlando Starflyer,-18.54,expense,Entertainment
+2025-10-27,Hyatt Place Orlando,-9.05,expense,Entertainment
+2025-10-27,Hyatt Place Orlando,-13.33,expense,Entertainment
+2025-10-27,Bavarian Pretzels,-6.00,expense,Food
+2025-10-27,Mead Hall,-5.10,expense,Food
+2025-10-27,Meteor,-18.09,expense,Food
+2025-10-27,Butterbeer,-10.11,expense,Food
+2025-10-27,Starbucks,-11.39,expense,Food
+2025-10-27,Olive Garden,-26.81,expense,Food
+2025-10-27,ParkMobile,-30.49,expense,Transport
+2025-10-27,Uber,-13.97,expense,Transport
+2025-10-27,SunPass,-10.00,expense,Transport
+
+2025-10-28,32 Market,-2.00,expense,Food
+2025-10-28,32 Market,-1.75,expense,Food
+
+2025-11-01,Spotify,-13.57,expense,Entertainment
+2025-11-01,Huey Magoo’s,-13.18,expense,Food
+2025-11-01,Huey Magoo’s,-1.03,expense,Food
+2025-11-01,T-Mobile,-80.00,expense,Transport
+2025-11-01,McDonald’s,-11.74,expense,Food
+
+2025-11-03,PDQ Orlando,-14.43,expense,Food
+2025-11-03,Red Eye Smoke Shop,-10.70,expense,Entertainment
+
+2025-11-07,Kroger Fuel,-5.95,expense,Transport
+2025-11-07,Uber,-15.04,expense,Transport
+2025-11-07,Hudson News,-8.91,expense,Entertainment
+2025-11-07,Top of the Stairs,-11.00,expense,Food
+
+2025-11-08,Chipotle,-21.87,expense,Food
+2025-11-09,Benny Marzano’s,-6.00,expense,Food
+2025-11-09,Food Lion,-11.75,expense,Food
+
+2025-11-14,Seminole DMV,-42.05,expense,Transport
+2025-11-14,Sleeper,-100.00,expense,Entertainment
+2025-11-14,Sleeper,-100.00,expense,Entertainment
+2025-11-14,Publix,-9.62,expense,Food
+
+2025-11-16,EOS Fitness,-13.68,expense,Health
+2025-11-16,McDonald’s,-9.60,expense,Food
+
+2025-11-17,Chipotle,-13.64,expense,Food
+2025-11-20,AMC Tickets,-18.96,expense,Entertainment
+2025-11-20,Orlando Magic,-10.16,expense,Entertainment
+2025-11-20,Levy @ Kia Center,-23.94,expense,Food
+2025-11-20,Levy @ Kia Center,-17.01,expense,Food
+
+2025-11-22,Liquor Library,-14.90,expense,Entertainment
+
+2025-11-24,Pointe Orlando,-39.42,expense,Entertainment
+2025-11-24,Pointe Orlando,-9.86,expense,Entertainment
+2025-11-24,Pointe Orlando,-5.00,expense,Entertainment
+2025-11-24,Pointe Orlando,-16.80,expense,Entertainment
+2025-11-24,Pointe Orlando,-39.42,expense,Entertainment
+2025-11-24,Publix,-11.76,expense,Food
+
+2025-11-25,Sleeper,-25.00,expense,Entertainment
+2025-11-25,32 Market,-1.75,expense,Food
