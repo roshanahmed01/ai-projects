@@ -1,5 +1,7 @@
 import os
 import streamlit as st
+import matplotlib.pyplot as plt
+
 
 # Import functions from your existing engine file (main.py)
 from main import (
@@ -12,6 +14,30 @@ from main import (
     estimate_baseline_nonrent_spending,
     rent_affordability_report,
 )
+
+import csv
+from io import StringIO
+
+def load_rows_from_uploaded_csvs(uploaded_files):
+    all_rows = []
+    filenames = []
+
+    for f in uploaded_files:
+        content = f.getvalue().decode("utf-8")
+        reader = csv.DictReader(StringIO(content))
+        filenames.append(f.name)
+
+        for row in reader:
+            all_rows.append({
+                "date": row["date"].strip(),
+                "description": row.get("description", "").strip(),
+                "amount": float(row["amount"]),
+                "type": row.get("type", "").strip().lower(),
+                "category": row.get("category", "").strip(),
+            })
+
+    return all_rows, sorted(filenames)
+
 
 # ----------------------------
 # Streamlit Page Setup
@@ -36,6 +62,11 @@ income_override_value = st.sidebar.number_input(
     disabled=not use_income_override,
 )
 
+uploaded_files = st.sidebar.file_uploader(
+    "Upload monthly CSVs (YYYY-MM.csv)", type=["csv"], accept_multiple_files=True
+)
+
+
 rent_amount = st.sidebar.number_input("Monthly rent ($)", min_value=0.0, value=1400.0, step=50.0)
 rent_start_month = st.sidebar.text_input("Rent start month (YYYY-MM)", value="2026-02")
 rent_start_day = st.sidebar.number_input("Rent start day", min_value=1, max_value=31, value=14, step=1)
@@ -47,16 +78,25 @@ st.sidebar.header("Projections")
 proj_month_1 = st.sidebar.text_input("Projection month 1 (YYYY-MM)", value="2026-02")
 proj_month_2 = st.sidebar.text_input("Projection month 2 (YYYY-MM)", value="2026-03")
 
+
 # ----------------------------
 # Load Data
 # ----------------------------
-try:
-    rows, loaded_files = load_all_monthly_csvs(data_folder)
-except Exception as e:
-    st.error(f"Could not load monthly CSVs from '{data_folder}'. Error: {e}")
-    st.stop()
+if uploaded_files and len(uploaded_files) > 0:
+    rows, loaded_files = load_rows_from_uploaded_csvs(uploaded_files)
+else:
+    if not os.path.isdir(data_folder):
+        st.error(f"Data folder '{data_folder}' does not exist.")
+        st.stop()
 
-income_rows, expense_rows = split_income_and_expenses(rows)
+    try:
+        rows, loaded_files = load_all_monthly_csvs(data_folder)
+    except Exception as e:
+        st.exception(e)   # shows full traceback in the UI
+        st.stop()
+
+
+    income_rows, expense_rows = split_income_and_expenses(rows)
 
 # Basic sanity check
 st.write(f"**Loaded files:** {', '.join(loaded_files)}")
@@ -109,6 +149,23 @@ st.subheader("Income by month")
 st.dataframe(
     [{"Month": k, "Income": v} for k, v in sorted(monthly_income_totals.items())]
 )
+
+st.subheader("Income vs expenses by month (chart)")
+
+# Build a unified month list
+all_months = sorted(set(monthly_income_totals.keys()) | set(monthly_expense_totals.keys()))
+
+income_series = [monthly_income_totals.get(m, 0) for m in all_months]
+expense_series = [abs(monthly_expense_totals.get(m, 0)) for m in all_months]  # abs for display
+
+fig = plt.figure()
+plt.plot(all_months, income_series, marker="o")
+plt.plot(all_months, expense_series, marker="o")
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+st.pyplot(fig)
+
 
 # ----------------------------
 # Rent Affordability
@@ -164,9 +221,6 @@ def affordability_with_ui_override(target_month: str):
 
     return report
 
-rep1 = affordability_with_ui_override(proj_month_1)
-rep2 = affordability_with_ui_override(proj_month_2)
-
 def status_label(rep):
     # Simple, interpretable rules of thumb
     if rep["projected_income"] <= 0:
@@ -177,12 +231,48 @@ def status_label(rep):
         return "⚠️ Tight"
     return "✅ Comfortable"
 
+def money(x):
+    return f"${x:,.2f}"
+
+def pct(x):
+    return f"{x:.2f}%"
+
+def render_affordability_card(rep):
+    status = status_label(rep)
+
+    st.markdown(f"### {rep['month']} — {status}")
+
+    # Top row key metrics
+    a, b, c = st.columns(3)
+    a.metric("Projected income", money(rep["projected_income"]))
+    b.metric("Projected rent", money(rep["projected_rent"]))
+    c.metric("Projected net", money(rep["projected_net"]))
+
+    # Second row ratios
+    d, e, f = st.columns(3)
+    d.metric("Baseline non-rent spend", money(rep["baseline_nonrent_spend"]))
+    e.metric("Rent % of income", pct(rep["rent_pct_income"]))
+    f.metric("Total spend % of income", pct(rep["spend_pct_income"]))
+
+    # Short explanation line
+    if rep["projected_net"] < 0:
+        st.error("Net is negative: projected spending exceeds projected income.")
+    elif rep["rent_pct_income"] > 40 or rep["spend_pct_income"] > 85:
+        st.warning("This looks tight. Consider lowering non-rent spending or increasing income buffer.")
+    else:
+        st.success("This looks comfortable based on your recent spending baseline.")
+
+
+rep1 = affordability_with_ui_override(proj_month_1)
+rep2 = affordability_with_ui_override(proj_month_2)
+
+
+
 c1, c2 = st.columns(2)
 
 with c1:
-    st.subheader(f"{rep1['month']} — {status_label(rep1)}")
-    st.json(rep1)
+    render_affordability_card(rep1)
 
 with c2:
-    st.subheader(f"{rep2['month']} — {status_label(rep2)}")
-    st.json(rep2)
+    render_affordability_card(rep2)
+
